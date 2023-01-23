@@ -104,7 +104,7 @@ private fun ScreenContent(
 
         EquationHeaders()
         EquationValues(equation)
-        AnswerButtons(equation)
+        AnswerButton(equation)
     }
 }
 
@@ -171,40 +171,32 @@ private fun EquationValues(equation: MutableState<Equation>) {
     }
 }
 
+
 @Composable
-private fun AnswerButtons(equation: MutableState<Equation>) {
-    //show buttons only when user has clicked for the first time
-    if (equation.value.answer != "?") {
+private fun AnswerButton( equation: MutableState<Equation>) {
+    val context = LocalContext.current
+     if (equation.value.answer != "?") {
         Row {
-            AnswerButton(
-                text = stringResource(id = R.string.is_true),
-                answer = true,
-                equation = equation
-            )
-            Spacer(Modifier.width(16.dp))
-            AnswerButton(
-                text = stringResource(id = R.string.is_false),
-                answer = false,
-                equation = equation
-            )
+            Button(
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff4caf50) ),
+                onClick = { checkAnswer(context, true, equation) },
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.width(100.dp),
+            ) {
+                Text(text = stringResource(id= R.string.is_true))
+            }
+            Spacer (Modifier.width(16.dp))
+            Button(
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xffe64a19)),
+                onClick = { checkAnswer(context, false, equation) },
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.width(100.dp),
+            ) {
+                Text(text = stringResource(id= R.string.is_false))
+            }
         }
     }
 }
-
-@Composable
-private fun AnswerButton(text: String, answer: Boolean, equation: MutableState<Equation>) {
-    val context = LocalContext.current
-    val backgroundColor = if (answer) Color(0xff4caf50) else Color(0xffe64a19)
-    Button(
-        colors = ButtonDefaults.buttonColors(backgroundColor = backgroundColor),
-        onClick = { checkAnswer(context,answer,equation) },
-        shape = RoundedCornerShape(16.dp),
-        modifier = Modifier.width(100.dp),
-    ) {
-        Text(text = text)
-    }
-}
-
 
 private fun checkAnswer (context: Context, answer: Boolean, equation: MutableState<Equation>)
 {
