@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">MadLevel2Task2</string>
+        <string name="next">Next</string>
+        <string name="correct_answer">Correct answer!</string>
+        <string name="wrong_answer">Sorry, that\'s wrong :)</string>
+        <string name="title">Conjunction(AND)</string>
+        <string name="header">Conjunction Table(AND)</string>
+        <string name="is_true">True</string>
+        <string name="is_false">False</string>
+        <string name="equation_a">A</string>
+        <string name="equation_b">B</string>
+        <string name="equation_ab"><![CDATA[A&B]]></string>
+    </resources>
