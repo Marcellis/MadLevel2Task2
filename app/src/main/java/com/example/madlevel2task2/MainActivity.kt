@@ -1,5 +1,6 @@
 package com.example.madlevel2task2
 
+import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -92,14 +93,6 @@ private fun ScreenContent(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        val checkAnswer = { givenAnswer: Boolean ->
-            val message = if (verifyAnswer(equation) == givenAnswer) {
-                R.string.correct_answer
-            } else {
-                R.string.wrong_answer
-            }
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-        }
 
         Text(
             text = stringResource(R.string.header),
@@ -111,7 +104,7 @@ private fun ScreenContent(
 
         EquationHeaders()
         EquationValues(equation)
-        AnswerButtons(equation, checkAnswer)
+        AnswerButtons(equation)
     }
 }
 
@@ -179,36 +172,48 @@ private fun EquationValues(equation: MutableState<Equation>) {
 }
 
 @Composable
-private fun AnswerButtons(equation: MutableState<Equation>, checkAnswer: (Boolean) -> Unit) {
+private fun AnswerButtons(equation: MutableState<Equation>) {
     //show buttons only when user has clicked for the first time
     if (equation.value.answer != "?") {
         Row {
             AnswerButton(
                 text = stringResource(id = R.string.is_true),
-                checkAnswer = checkAnswer,
-                answer = true
+                answer = true,
+                equation = equation
             )
             Spacer(Modifier.width(16.dp))
             AnswerButton(
                 text = stringResource(id = R.string.is_false),
-                checkAnswer = checkAnswer,
-                answer = false
+                answer = false,
+                equation = equation
             )
         }
     }
 }
 
 @Composable
-private fun AnswerButton(text: String, checkAnswer: (Boolean) -> Unit, answer: Boolean) {
+private fun AnswerButton(text: String, answer: Boolean, equation: MutableState<Equation>) {
+    val context = LocalContext.current
     val backgroundColor = if (answer) Color(0xff4caf50) else Color(0xffe64a19)
     Button(
         colors = ButtonDefaults.buttonColors(backgroundColor = backgroundColor),
-        onClick = { checkAnswer(answer) },
+        onClick = { checkAnswer(context,answer,equation) },
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier.width(100.dp),
     ) {
         Text(text = text)
     }
+}
+
+
+private fun checkAnswer (context: Context, answer: Boolean, equation: MutableState<Equation>)
+{
+    val message = if (verifyAnswer(equation) == answer) {
+        R.string.correct_answer
+    } else {
+        R.string.wrong_answer
+    }
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
 
 
